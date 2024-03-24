@@ -2,9 +2,242 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Rubik's Cube Solver</title>
+</head>
+    <style>
+    body{
+        background-color: bisque; /* просто задаём цвет заднему фону */
+
+    }
+    .cube {
+      width: 300px;    /* создаём место под развернутый куб */
+      height: 300px;
+      position: relative;
+      margin: 50px auto;
+    }
+    .face {
+      width: 100px;    /* пишем, какого размера будет сторона квадрата и её свойства */
+      height: 100px;
+      position: absolute;
+      border: 1px solid black;
+      text-align: center;
+      line-height: 100px;
+      font-size: 24px;
+    }
+    .front {
+      top: 100px;  /* передняя грань */
+      left: 100px;
+      background-color: rgb(32, 29, 29);
+    }
+    .back {      /* задняя грань */
+      top: 100px;
+      left: 300px;
+      background-color: rgb(32, 29, 29);
+    }
+    .left {      /* левая грань */
+      top: 100px;
+      background-color: rgb(32, 29, 29);
+    }
+    .right {  /* правая грань */
+      top: 100px;
+      left: 200px;
+      background-color: rgb(32, 29, 29);
+    }
+    .top { /* верхняя грань */
+      top: 0;
+      left: 100px;
+      background-color: rgb(32, 29, 29);
+    }
+    .bottom {  /* нижняя грань */
+      top: 200px;
+      left: 100px;
+      background-color: rgb(32, 29, 29);
+    }
+
+    .f1, .f2, .f3, .f4, .f5, .f6, .f7, .f8, .f9,      /* задаём размеры для каждого маленького квадратика */
+    .l1, .l2, .l3, .l4, .l5, .l6, .l7, .l8, .l9,
+    .r1, .r2, .r3, .r4, .r5, .r6, .r7, .r8, .r9,
+    .bo1, .bo2, .bo3, .bo4, .bo5, .bo6, .bo7, .bo8, .bo9,
+    .b1, .b2, .b3, .b4, .b5, .b6, .b7, .b8, .b9,
+    .t1, .t2, .t3, .t4, .t5, .t6, .t7, .t8, .t9{
+        height: 29.7px;
+        width: 29.7px;
+        position: absolute;
+    }
+
+    .f1 { top: 0; left: 0; background-color: white; }   /* распределяем маленькие квадраты внутри большого */
+    .f2 { top: 0; left: 35px; background-color: white; }
+    .f3 { top: 0; left: 70px; background-color: white; }
+    .f4 { top: 35px; left: 0; background-color: white; }
+    .f5 { top: 35px; left: 35px; background-color: white; }
+    .f6 { top: 35px; left: 70px; background-color: white; }
+    .f7 { top: 70px; left: 0; background-color: white; }
+    .f8 { top: 70px; left: 35px; background-color: white; }
+    .f9 { top: 70px; left: 70px; background-color: white; }
+
+    .l1 { top: 0; left: 0; background-color: green; }
+    .l2 { top: 0; left: 35px; background-color: green; }
+    .l3 { top: 0; left: 70px; background-color: green; }
+    .l4 { top: 35px; left: 0; background-color: green; }
+    .l5 { top: 35px; left: 35px; background-color: green; }
+    .l6 { top: 35px; left: 70px; background-color: green; }
+    .l7 { top: 70px; left: 0; background-color: green; }
+    .l8 { top: 70px; left: 35px; background-color: green; }
+    .l9 { top: 70px; left: 70px; background-color: green; }
+
+    .r1 { top: 0; left: 0; background-color: blue; }
+    .r2 { top: 0; left: 35px; background-color: blue; }
+    .r3 { top: 0; left: 70px; background-color: blue; }
+    .r4 { top: 35px; left: 0; background-color: blue; }
+    .r5 { top: 35px; left: 35px; background-color:blue; }
+    .r6 { top: 35px; left: 70px; background-color:blue; }
+    .r7 { top: 70px; left: 0; background-color: blue; }
+    .r8 { top: 70px; left: 35px; background-color:blue; }
+    .r9 { top: 70px; left: 70px; background-color:blue; }
+
+    .b1 { top: 0; left: 0; background-color: yellow; }
+    .b2 { top: 0; left: 35px; background-color: yellow; }
+    .b3 { top: 0; left: 70px; background-color: yellow; }
+    .b4 { top: 35px; left: 0; background-color: yellow; }
+    .b5 { top: 35px; left: 35px; background-color:yellow; }
+    .b6 { top: 35px; left: 70px; background-color:yellow; }
+    .b7 { top: 70px; left: 0; background-color: yellow; }
+    .b8 { top: 70px; left: 35px; background-color:yellow; }
+    .b9 { top: 70px; left: 70px; background-color:yellow; }
+
+    .bo1 { top: 0; left: 0; background-color: red; }
+    .bo2 { top: 0; left: 35px; background-color: red; }
+    .bo3 { top: 0; left: 70px; background-color: red; }
+    .bo4 { top: 35px; left: 0; background-color: red; }
+    .bo5 { top: 35px; left: 35px; background-color: red; }
+    .bo6 { top: 35px; left: 70px; background-color: red; }
+    .bo7 { top: 70px; left: 0; background-color: red; }
+    .bo8 { top: 70px; left: 35px; background-color:red; }
+    .bo9 { top: 70px; left: 70px; background-color: red; }
+
+    .t1 { top: 0; left: 0; background-color: orange; }
+    .t2 { top: 0; left: 35px; background-color: orange; }
+    .t3 { top: 0; left: 70px; background-color: orange; }
+    .t4 { top: 35px; left: 0; background-color: orange; }
+    .t5 { top: 35px; left: 35px; background-color: orange; }
+    .t6 { top: 35px; left: 70px; background-color: orange; }
+    .t7 { top: 70px; left: 0; background-color: orange; }
+    .t8 { top: 70px; left: 35px; background-color:orange; }
+    .t9 { top: 70px; left: 70px; background-color: orange; }
+
+    .choose_colors {
+      background-color: rgb(41, 39, 36);
+      width: 250px;
+      height: 70px;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      margin: 0 auto;
+    }
+    .choose_colors div {
+      width: 30px;
+      height: 30px;
+    }
+  </style>
 </head>
 <body>
+  <div class="cube">
+    <div class="face front">
 
+        <div class="f1" onclick="handleClick(1)"></div>   <!--Здесь мы создали все маленькие квадраты внутри больших и немного используем javascript-->
+        <div class="f2" onclick="handleClick(2)"></div>
+        <div class="f3" onclick="handleClick(3)"></div>
+        <div class="f4" onclick="handleClick(4)"></div>
+        <div class="f5" onclick="handleClick(5)"></div>
+        <div class="f6" onclick="handleClick(6)"></div>
+        <div class="f7" onclick="handleClick(7)"></div>
+        <div class="f8" onclick="handleClick(8)"></div>
+        <div class="f9" onclick="handleClick(9)"></div>
+
+    </div>
+    <div class="face left">
+
+        <div class="l1" onclick="handleClick(10)"></div>
+        <div class="l2" onclick="handleClick(11)"></div>
+        <div class="l3" onclick="handleClick(12)"></div>
+        <div class="l4" onclick="handleClick(13)"></div>
+        <div class="l5" onclick="handleClick(14)"></div>
+        <div class="l6" onclick="handleClick(15)"></div>
+        <div class="l7" onclick="handleClick(16)"></div>
+        <div class="l8" onclick="handleClick(17)"></div>
+        <div class="l9" onclick="handleClick(18)"></div>
+
+    </div>
+    <div class="face right">
+
+        <div class="r1" onclick="handleClick(19)"></div>
+        <div class="r2" onclick="handleClick(20)"></div>
+        <div class="r3" onclick="handleClick(21)"></div>
+        <div class="r4" onclick="handleClick(22)"></div>
+        <div class="r5" onclick="handleClick(23)"></div>
+        <div class="r6" onclick="handleClick(24)"></div>
+        <div class="r7" onclick="handleClick(25)"></div>
+        <div class="r8" onclick="handleClick(26)"></div>
+        <div class="r9" onclick="handleClick(27)"></div>
+
+    </div>
+    <div class="face back">
+
+      <div class="b1" onclick="handleClick(28)"></div>
+      <div class="b2" onclick="handleClick(29)"></div>
+      <div class="b3" onclick="handleClick(30)"></div>
+      <div class="b4" onclick="handleClick(31)"></div>
+      <div class="b5" onclick="handleClick(32)"></div>
+      <div class="b6" onclick="handleClick(33)"></div>
+      <div class="b7" onclick="handleClick(34)"></div>
+      <div class="b8" onclick="handleClick(35)"></div>
+      <div class="b9" onclick="handleClick(36)"></div>
+
+    </div>
+    <div class="face top">
+
+      <div class="t1" onclick="handleClick(37)"></div>
+      <div class="t2" onclick="handleClick(38)"></div>
+      <div class="t3" onclick="handleClick(39)"></div>
+      <div class="t4" onclick="handleClick(40)"></div>
+      <div class="t5" onclick="handleClick(41)"></div>
+      <div class="t6" onclick="handleClick(42)"></div>
+      <div class="t7" onclick="handleClick(43)"></div>
+      <div class="t8" onclick="handleClick(44)"></div>
+      <div class="t9" onclick="handleClick(45)"></div>
+
+    </div>
+    <div class="face bottom">
+
+      <div class="bo1" onclick="handleClick(46)"></div>
+      <div class="bo2" onclick="handleClick(47)"></div>
+      <div class="bo3" onclick="handleClick(48)"></div>
+      <div class="bo4" onclick="handleClick(49)"></div>
+      <div class="bo5" onclick="handleClick(50)"></div>
+      <div class="bo6" onclick="handleClick(51)"></div>
+      <div class="bo7" onclick="handleClick(52)"></div>
+      <div class="bo8" onclick="handleClick(53)"></div>
+      <div class="bo9" onclick="handleClick(54)"></div>
+
+    </div>
+  </div>
+
+    <div class="choose_colors">  <!-- Создаём область для выбора цвета, чтобы пользователь мог указать их -->
+      <div class="white" style="background-color: white;" onclick="handleClick(100)"></div>
+      <div class="red" style="background-color: red;" onclick="handleClick(101)"></div>
+      <div class="yellow" style="background-color: yellow;" onclick="handleClick(102)"></div>
+      <div class="blue" style="background-color: blue;" onclick="handleClick(103)"></div>
+      <div class="green" style="background-color: green;" onclick="handleClick(104)"></div>
+      <div class="orange" style="background-color: orange;" onclick="handleClick(105)"></div>
+    </div>
+
+  <script>
+
+    function handleClick(number) {
+      alert("Вы нажали на маленький квадрат " + number);
+      // Тут мы просто выводим номер маленького квадрата, на который нажали
+    }
+
+  </script>
 </body>
 </html>
