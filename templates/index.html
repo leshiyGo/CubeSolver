@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Rubik's Cube Solver</title>
-</head>
-    <style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rubik's Cube Unfold</title>
+  <style>
     body{
         background-color: bisque; /* просто задаём цвет заднему фону */
 
@@ -144,41 +144,41 @@
   <div class="cube">
     <div class="face front">
 
-        <div class="f1" onclick="handleClick(1)"></div>   <!--Здесь мы создали все маленькие квадраты внутри больших и немного используем javascript-->
-        <div class="f2" onclick="handleClick(2)"></div>
-        <div class="f3" onclick="handleClick(3)"></div>
-        <div class="f4" onclick="handleClick(4)"></div>
-        <div class="f5" onclick="handleClick(5)"></div>
-        <div class="f6" onclick="handleClick(6)"></div>
-        <div class="f7" onclick="handleClick(7)"></div>
-        <div class="f8" onclick="handleClick(8)"></div>
-        <div class="f9" onclick="handleClick(9)"></div>
+        <div class="f1" onclick="handleClick(1)" ></div>   <!--Здесь мы создали все маленькие квадраты внутри больших и немного используем javascript-->
+        <div class="f2" onclick="handleClick(2)" ></div>
+        <div class="f3" onclick="handleClick(3)" ></div>
+        <div class="f4" onclick="handleClick(4)" ></div>
+        <div class="f5" onclick="handleClick(5)" ></div>
+        <div class="f6" onclick="handleClick(6)" ></div>
+        <div class="f7" onclick="handleClick(7)" ></div>
+        <div class="f8" onclick="handleClick(8)" ></div>
+        <div class="f9" onclick="handleClick(9)" ></div>
 
     </div>
     <div class="face left">
 
-        <div class="l1" onclick="handleClick(10)"></div>
-        <div class="l2" onclick="handleClick(11)"></div>
-        <div class="l3" onclick="handleClick(12)"></div>
-        <div class="l4" onclick="handleClick(13)"></div>
-        <div class="l5" onclick="handleClick(14)"></div>
-        <div class="l6" onclick="handleClick(15)"></div>
-        <div class="l7" onclick="handleClick(16)"></div>
-        <div class="l8" onclick="handleClick(17)"></div>
-        <div class="l9" onclick="handleClick(18)"></div>
+        <div class="l1" onclick="handleClick(10) "></div>
+        <div class="l2" onclick="handleClick(11) "></div>
+        <div class="l3" onclick="handleClick(12) "></div>
+        <div class="l4" onclick="handleClick(13) "></div>
+        <div class="l5" onclick="handleClick(14) "></div>
+        <div class="l6" onclick="handleClick(15) "></div>
+        <div class="l7" onclick="handleClick(16) "></div>
+        <div class="l8" onclick="handleClick(17) "></div>
+        <div class="l9" onclick="handleClick(18) "></div>
 
     </div>
     <div class="face right">
 
-        <div class="r1" onclick="handleClick(19)"></div>
-        <div class="r2" onclick="handleClick(20)"></div>
-        <div class="r3" onclick="handleClick(21)"></div>
-        <div class="r4" onclick="handleClick(22)"></div>
-        <div class="r5" onclick="handleClick(23)"></div>
-        <div class="r6" onclick="handleClick(24)"></div>
-        <div class="r7" onclick="handleClick(25)"></div>
-        <div class="r8" onclick="handleClick(26)"></div>
-        <div class="r9" onclick="handleClick(27)"></div>
+        <div class="r1" onclick="handleClick(19) "></div>
+        <div class="r2" onclick="handleClick(20) "></div>
+        <div class="r3" onclick="handleClick(21) "></div>
+        <div class="r4" onclick="handleClick(22) "></div>
+        <div class="r5" onclick="handleClick(23) "></div>
+        <div class="r6" onclick="handleClick(24) "></div>
+        <div class="r7" onclick="handleClick(25) "></div>
+        <div class="r8" onclick="handleClick(26) "></div>
+        <div class="r9" onclick="handleClick(27) "></div>
 
     </div>
     <div class="face back">
@@ -223,21 +223,44 @@
   </div>
 
     <div class="choose_colors">  <!-- Создаём область для выбора цвета, чтобы пользователь мог указать их -->
-      <div class="white" style="background-color: white;" onclick="handleClick(100)"></div>
-      <div class="red" style="background-color: red;" onclick="handleClick(101)"></div>
-      <div class="yellow" style="background-color: yellow;" onclick="handleClick(102)"></div>
-      <div class="blue" style="background-color: blue;" onclick="handleClick(103)"></div>
-      <div class="green" style="background-color: green;" onclick="handleClick(104)"></div>
-      <div class="orange" style="background-color: orange;" onclick="handleClick(105)"></div>
+      <div style="background-color: white;" onclick="handleClick('white')"></div>
+      <div style="background-color: red;" onclick="handleClick('red')"></div>
+      <div style="background-color: yellow;" onclick="handleClick('yellow')"></div>
+      <div style="background-color: blue;" onclick="handleClick('blue')"></div>
+      <div style="background-color: green;" onclick="handleClick('green')"></div>
+      <div style="background-color: orange;" onclick="handleClick('orange')"></div>
     </div>
 
   <script>
 
-    function handleClick(number) {
-      alert("Вы нажали на маленький квадрат " + number);
-      // Тут мы просто выводим номер маленького квадрата, на который нажали
-    }
+    let selectedColor = ''; // Объявляем переменная для хранения цвета, который запишется после нажатия на один из квадратов в области выбора цвета
+
+    // Обработчик события для выбора цвета
+    document.querySelectorAll('.choose_colors div').forEach(function(colorSquare)
+    { //Этот код находит все элементы div внутри элемента с классом choose_colors. Затем метод forEach вызывает функцию для каждого найденного элемента
+      colorSquare.addEventListener('click', function() //Эта строка добавляет обработчик события клика для каждого найденного элемента.
+                                                       //Когда есть нажатие на один из этих элементов, будет выполнена функция обработчика события.
+      { selectedColor = colorSquare.style.backgroundColor; });// Сохраняем цвет в переменную
+    });
+
+    // Обработчик события для кубика
+    document.querySelectorAll('.cube .face div').forEach(function(square) {  //Этот код находит все маленькие квадратики (div) внутри элементов с классом face
+                                                                             //внутри элемента с классом cube. Затем метод forEach вызывает функцию для каждого
+                                                                             //найденного квадратика.
+      square.addEventListener('click', function() {  // - Здесь добавляется обработчик события клика для каждого маленького квадратика на кубе. Когда мы нажимаем
+                                                     // на один из этих квадратиков, будет выполнена функция обработчика события.
+        if (selectedColor !== '') {  //- Эта строка проверяет, был ли выбран цвет (то есть, не пустая ли переменная selectedColor), а если переменная пустая,
+                                     //то выполняется ветка else (256 строка)
+          square.style.backgroundColor = selectedColor; // Применяем цвет к кубику
+        } else {
+          alert('Выберите цвет перед тем, как красить квадраты на кубе!');
+        }
+      });
+    });
+
+
 
   </script>
+
 </body>
 </html>
